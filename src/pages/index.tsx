@@ -19,6 +19,7 @@ import Header from 'components/Header'
 import useWhitelistData from 'hooks/useWhitelistData'
 import { whitelistAddress } from 'constant/abi/contractAddress'
 import WHITELISTABI from '../constant/abi/whitelistDapp.json'
+import { toast } from 'react-hot-toast'
 
 export default function Home() {
  return (
@@ -32,7 +33,7 @@ export default function Home() {
 
 function Main() {
  const { address, isConnected, connector } = useAccount()
-
+ //  const [isLoading, setIsLoading] = useState(false)
  const { chain, chains } = useNetwork()
  const {
   isLoading: isNetworkLoading,
@@ -46,20 +47,23 @@ function Main() {
   address
  )
 
- const { getAddToWhiteList } = useWhitelistData()
- console.log({ getAddToWhiteList })
+ const { getAddToWhiteList, isIdle, isLoading, reset, error, isSuccess } =
+  useWhitelistData()
+
  async function addToWhiteList() {
   try {
    getAddToWhiteList()
-   // here to call the write function
+   isSuccess ? toast.success('Successfully toasted!') : null
   } catch (err) {
+   toast.error(`${error?.message}`)
+   reset()
    console.error(err)
   }
  }
  return (
-  <main className={styles.main + ' min-h-screen space-y-6'}>
+  <main className={styles.main + ' space-y-6'}>
    <>
-    <div className="hero  bg-base-200">
+    <div className="hero  flex-1 bg-base-200">
      <div className="hero-content flex-col ">
       <div className="max-w-md text-center ">
        <h1 className="text-5xl font-bold">Join WhiteList</h1>
@@ -75,20 +79,36 @@ function Main() {
          MaxAddress: <span>{maxWhitelist ? maxWhitelist : 0}</span>
         </h3>
         <h3 className="font-bold">
-         Total White Listed:{' '}
+         Total Whitelisted:{' '}
          <span>{totalWhitelisted ? totalWhitelisted : 0}</span>
         </h3>
         <h3 className="font-bold">
-         You are WiteListed? :{' '}
+         You are WiteListed:{' '}
          <span
           className={whiteListedAddress ? 'text-green-500' : 'text-red-500'}
          >
           {whiteListedAddress ? 'True' : 'False'}
          </span>
         </h3>
-        <button className="btn-primary btn" onClick={() => addToWhiteList()}>
-         Add Me to WhiteList{' '}
-        </button>
+        {whiteListedAddress ? (
+         <button className="btn-primary btn">You Are WhiteListed</button>
+        ) : isLoading ? (
+         <>
+          <span className="loading-dots loading-sm loading btn-primary btn"></span>
+         </>
+        ) : (
+         <button
+          className={`${
+           isLoading
+            ? 'btn-secondary btn cursor-not-allowed'
+            : 'btn-primary btn'
+          }`}
+          disabled={isLoading}
+          onClick={() => addToWhiteList()}
+         >
+          Add Me to WhiteList{' '}
+         </button>
+        )}
        </div>
       </div>
      </div>

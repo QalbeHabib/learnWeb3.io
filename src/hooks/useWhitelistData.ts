@@ -11,7 +11,7 @@ import { whitelistAddress } from 'constant/abi/contractAddress'
 const useWhitelistData = (functionName?: string, args?: any) => {
  const { chain, chains } = useNetwork()
  console.log({ chain, chains })
- const { data, isFetching, isLoading, isIdle, error } = useContractRead({
+ const { data }: any = useContractRead({
   abi: WHITELISTABI,
   address: whitelistAddress,
   functionName,
@@ -22,15 +22,22 @@ const useWhitelistData = (functionName?: string, args?: any) => {
   address: whitelistAddress,
   abi: WHITELISTABI,
   functionName: 'addAddressToWhitelist',
-  chainId: chain.id,
+  chainId: chain?.id,
  })
 
- const { data: whiteListData, write: getAddToWhiteList } =
-  useContractWrite(config)
+ const {
+  data: whiteListData,
+  isLoading,
+  isIdle,
+  reset,
+  error,
+  writeAsync: getAddToWhiteList,
+  isSuccess,
+ } = useContractWrite(config)
 
- console.log({ whiteListData, getAddToWhiteList })
+ console.log({ whiteListData, getAddToWhiteList, error })
 
- return { data, getAddToWhiteList }
+ return { data, getAddToWhiteList, isLoading, isIdle, reset, error, isSuccess }
 }
 
 export default useWhitelistData
