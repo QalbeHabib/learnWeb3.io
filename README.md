@@ -1,6 +1,9 @@
-# dApp Starter Boilerplate
+# Dapp Starter Boilerplate
 
 A dApp starter kit template to quick start a dapp project with Next.js + Tailwind CSS + Ethers + wagmi + RainbowKit.
+
+All the LearnWeb3.io projects are in their branches.
+checkout the branches.
 
 Other tools/components included: Headless UI, Heroicons, Autoprefixer, Sass, PostCSS, ESLint, Prettier.
 
